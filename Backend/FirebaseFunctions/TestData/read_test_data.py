@@ -17,9 +17,8 @@ def is_in_line(top_line,bottom_line,point):
     # Distance relative to line limit
     # Negative = Inside
     # Positive = Outside
-    # Closed to 0 = better
+    # Closer to 0 = better
     d_line = 0.02
-    #  
     return top_point*(1-t) <= point['y'] <= bottom_point*(1+t) and -d_line <= distance <= d_line, distance
 
 def read_json_file(file_name):
@@ -35,6 +34,9 @@ def read_json_file(file_name):
                 lower_line_params = get_lin_params(points[2],points[3])
                 possibilities.append((upper_line_params, lower_line_params))
 
+        for item in possibilities:
+            print(item)
+        # print(possibilities)
         results = []
         for i in range(len(data)-1, -1,-1):
             z = data[i]
@@ -47,9 +49,9 @@ def read_json_file(file_name):
                             results.append((x,is_inside[1]))
                     except:
                         continue
-        print(sorted(results))
+        print(sorted(results, reverse=True))
                
 
-for i in range(1,8):
-    read_json_file(f"test_data{i}.json")
-# read_json_file(f"test_data{7}.json")
+# for i in range(1,8):
+#     read_json_file(f"test_data{i}.json")
+read_json_file(f"test_data{7}.json")
