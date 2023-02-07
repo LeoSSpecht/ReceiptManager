@@ -19,31 +19,58 @@ import {
 
 import {
   Colors,
+  DebugInstructions,
+  Header,
+  LearnMoreLinks,
+  ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
-import ImageUploader from './src/pages/ImageUploader';
-import LoginPage from './src/pages/LoginPage';
-import { useState } from 'react';
+import CameraView from './components/CameraView';
+import CameraOptionButton from './components/NButton';
+import ImageUploader from './pages/ImageUploader';
 
+type SectionProps = PropsWithChildren<{
+  title: string;
+}>;
 
+const Section = ({title, children}:{title: string, children: React.ReactNode }) => {
+  const isDarkMode = useColorScheme() === 'dark';
+  return (
+    <View style={styles.sectionContainer}>
+      <Text
+        style={[
+          styles.sectionTitle,
+          {
+            color: isDarkMode ? Colors.white : Colors.black,
+          },
+        ]}>
+        {title}
+      </Text>
+      <Text
+        style={[
+          styles.sectionDescription,
+          {
+            color: isDarkMode ? Colors.light : Colors.dark,
+          },
+        ]}>
+        {children}
+      </Text>
+    </View>
+  );
+}
 
 function App(): JSX.Element {
-  const [loginState, setLoginState] = useState({state: false, uid: ""});
+  const isDarkMode = useColorScheme() === 'dark';
 
-  const LogInData = (state: boolean, uid: string) => {
-    setLoginState({'state': state, 'uid': uid})
-  }
+  const backgroundStyle = {
+    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+  };
 
   return (
-    <SafeAreaView>
-      {/* <View style = {{padding: 10, backgroundColor: Colors.white, alignItems: 'center'}}>
+    <SafeAreaView style={backgroundStyle}>
+      <View style = {{padding: 10, backgroundColor: Colors.white, alignItems: 'center'}}>
         <ImageUploader/>
-      </View> */}
-      {
-        loginState.state ? 
-        <Text>Logged in</Text>:
-        <LoginPage changeLoginState={LogInData}></LoginPage>  
-      }
+      </View>
     </SafeAreaView>
   );
 }
