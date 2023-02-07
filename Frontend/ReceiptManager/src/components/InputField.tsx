@@ -1,14 +1,18 @@
 import React, {useState} from 'react';
-import { TextInput, View, StyleSheet } from 'react-native';
+import { TextInput, View, StyleSheet, ViewStyle } from 'react-native';
 
 // import { Container } from './styles';
 
 type InputProps = {
     placeholder: string;
-    money: boolean;
+    money?: boolean;
+    password?: boolean;
+    email?: boolean;
     handler: (_:any) => void;
+    placeHolderColor?: string;
+    customStyle?: ViewStyle
 }
-const InputField: React.FC<InputProps> = ({placeholder, money, handler}) => {
+const InputField: React.FC<InputProps> = ({placeholder, money = false, handler, password = false, email = false, placeHolderColor = "#C7C7CD",customStyle}) => {
     const [currValue, setCurrValue] = useState('');
     const spaces = 15;
 
@@ -34,14 +38,17 @@ const InputField: React.FC<InputProps> = ({placeholder, money, handler}) => {
         }
     }
   return (
-    <View style = {styles.box}>
+    <View style = {[styles.box, customStyle]}>
         <TextInput
+            placeholderTextColor={placeHolderColor}
+            autoCapitalize = {email ? 'none' : 'sentences'}
+            secureTextEntry = {password}
             onChangeText={money ? formatMoney : onChange}
             value = {currValue}
             placeholder = {money ? `$ ${'0.00'.padStart(spaces)}` : placeholder}
             onBlur = {reset}
-            keyboardType= "numeric"
-            style = {{backgroundColor: 'white'}}
+            keyboardType= {money ? "numeric" : 'default'}
+            style = {[{backgroundColor: 'white'}, customStyle]}
         />
     </View>
   );
