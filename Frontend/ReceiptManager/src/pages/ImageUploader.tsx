@@ -84,31 +84,32 @@ const ImageUploader: React.FC = () => {
 
 
     return (
-        <View>
+        <View style = {{alignItems: 'center',height: '100%', width: '100%'}}>
             <View style={{
-            aspectRatio: 0.6,
-            backgroundColor: '#eeeeee',
-            width: '90%',
-            borderRadius: 10,
-            marginTop: 10
-            }}>
-                {
-                    inputManually ? 
-                    <ManualInputForms changeInputMode={changeInputMode} handler={changeManualInput}/>:
-                    <CameraView 
-                        isImageSelected = {isImageSelected}
-                        imageData = {selectedImage}
-                        setImage = {setSelectedImage}
-                        setInputManually = {changeInputMode}
-                        />
-                }
+                flex: 0.95,
+                backgroundColor: '#eeeeee',
+                alignSelf: 'stretch',
+                marginHorizontal: 15,
+                borderRadius: 10,
+                marginTop: 10
+                }}>
+                    {
+                        inputManually ? 
+                        <ManualInputForms changeInputMode={changeInputMode} handler={changeManualInput}/>:
+                        <CameraView 
+                            isImageSelected = {isImageSelected}
+                            imageData = {selectedImage}
+                            setImage = {setSelectedImage}
+                            setInputManually = {changeInputMode}
+                            />
+                    }
                 
             </View>
-            <View style = {{marginVertical: 10, width: '100%'}}>
+            <View style = {{marginVertical: 10, alignSelf: 'stretch', marginHorizontal: 15}}>
                 <SelectDropdown
                     data={categories}
                     onSelect={setCategory}
-                    buttonStyle={{borderRadius: 10, width: '90%'}}
+                    buttonStyle={{borderRadius: 10, width: '100%'}}
                     buttonTextStyle={{fontSize: 14}}
                     defaultButtonText={`Category: ${category}`}
                     rowTextStyle = {{fontSize: 14}}

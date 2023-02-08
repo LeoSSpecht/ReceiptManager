@@ -1,24 +1,27 @@
-import React, {useState, useEffect} from 'react';
-import { View, StyleSheet, Text, Alert, TouchableOpacity, ActivityIndicator } from 'react-native';
+import React, {useState, useEffect, useContext} from 'react';
+import { View, Text, Alert, TouchableOpacity, ActivityIndicator } from 'react-native';
+import AppLoginContext from '../components/LoginContext';
+
 import InputField from '../components/InputField';
 import CameraOptionButton from '../components/NButton';
 import { Icon } from 'react-native-elements'
 
 import { app } from '../firebase/config';
-import { GoogleSignin, GoogleSigninButton } from '@react-native-google-signin/google-signin'
+import { GoogleSignin } from '@react-native-google-signin/google-signin'
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithCredential } from "firebase/auth";
 import GoogleButton from '../components/GoogleButton';
-// import { Container } from './styles';
+
 
 const auth = getAuth(app);
 
 type LoginProps = {
     register?:boolean;
-    changeLoginState: (state: boolean, uid: string) => void;
     setRegisterState?: () => void;
 }
 
-const LoginPage: React.FC<LoginProps> = ({register = false, changeLoginState, setRegisterState}) => {
+const LoginPage: React.FC<LoginProps> = ({register = false, setRegisterState}) => {
+    const LoginContext = useContext(AppLoginContext)
+    const changeLoginState = LoginContext.setLogin;
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setconfirmPassword] = useState("");
@@ -207,48 +210,4 @@ const LoginPage: React.FC<LoginProps> = ({register = false, changeLoginState, se
   );
 }
 
-const LoginFlux: React.FC<LoginProps> = ({changeLoginState}) =>{
-    const [registering, setIsRegistering] = useState(false);
-    const login = () => {
-        return (
-            <View>
-                <LoginPage 
-                    changeLoginState={changeLoginState} 
-                    />
-                <CameraOptionButton
-                    text = 'Not registered? Register now'
-                    handler={() => {setIsRegistering(true)}}
-                    styleText = {{textDecorationLine: 'underline'}}
-                    styleButton = {{marginTop: 30}}
-                />
-            </View>
-        )
-    }
-
-    const register = () => {
-        return (
-            <View>
-                <LoginPage 
-                changeLoginState={changeLoginState}
-                register = {true}
-                setRegisterState={() =>{setIsRegistering(false)}}/>
-            </View>
-        )
-    }
-
-    return (
-        <View style = {styles.mainContainer}>
-            {registering ? register() : login()} 
-        </View>
-    )
-}
-
-const styles = StyleSheet.create({
-    mainContainer: {
-        height: '90%',
-        alignContent: 'flex-end',
-        justifyContent: 'flex-end'
-    }
-})
-
-export default LoginFlux;
+export default LoginPage;

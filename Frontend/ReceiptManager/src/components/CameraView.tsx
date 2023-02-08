@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Image, Text, TouchableOpacity, View, StyleSheet } from 'react-native';
+import { Image, Text, TouchableOpacity, View, StyleSheet, ViewStyle, Dimensions } from 'react-native';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import { SelectedImage } from '../pages/ImageUploader';
 import { MediaType, Asset } from 'react-native-image-picker';
@@ -41,7 +41,6 @@ const CameraView: React.FC<CameraViewProps> = ({isImageSelected, imageData, setI
     }
 
     const launchCamera_ = () => {
-        // console.log(launchCamera)
         launchCamera(options, (response) => {
           console.log('Response = ', response);
           if (response.didCancel) {
@@ -53,7 +52,6 @@ const CameraView: React.FC<CameraViewProps> = ({isImageSelected, imageData, setI
             if(response.assets && response.assets[0]){
               let asset: Asset = response.assets[0];
               setImage(fillImageAsset(asset));
-              // setIsImageSelected(true);
             }
           }
       });
@@ -71,7 +69,6 @@ const CameraView: React.FC<CameraViewProps> = ({isImageSelected, imageData, setI
           if(response.assets && response.assets[0]){
             let asset: Asset = response.assets[0];
             setImage(fillImageAsset(asset));
-            // setIsImageSelected(true);
           }
         }
       });
@@ -87,7 +84,7 @@ const CameraView: React.FC<CameraViewProps> = ({isImageSelected, imageData, setI
               resizeMode="cover"
               style = {{
                 height: '96%',
-                width: '100%',
+                // width: '100%',
                 borderRadius: 10,
               }}
               source={{uri: imageData!.imageUri}}/>
@@ -109,33 +106,35 @@ const CameraView: React.FC<CameraViewProps> = ({isImageSelected, imageData, setI
 
     const NoSelectedView = () => {
       return(
-        <View style = {{justifyContent: 'flex-end', alignContent: 'center', height: '98%'}}>
-          <View style = {{flex: 1, justifyContent: 'center'}}>
-            <Text style = {{textAlign: 'center'}}>No image selected yet!</Text>
-          </View>
-          <View style = {[styles.buttonRow, {marginBottom: 5}]}>
-            <CameraOptionButton 
-                text = 'Select from library' 
-                handler={launchImageLibrary_}
-                styleText = {{textDecorationLine: 'underline'}}></CameraOptionButton>
+        <View style = {{
+          justifyContent: 'flex-end',
+          flex:1,
+          marginBottom: 25
+          }}>
+            <Text style = {{textAlign: 'center', flex: 0.45}}>No image selected yet!</Text>
+            <View style = {[styles.buttonRow, {paddingBottom: 5}]}>
               <CameraOptionButton 
-                  text = 'Take picture' 
-                  handler={launchCamera_}
+                  text = 'Select from library' 
+                  handler={launchImageLibrary_}
                   styleText = {{textDecorationLine: 'underline'}}></CameraOptionButton>
-          </View>
-          
-          <Text style = {{textAlign: 'center'}}>or</Text>
-          <CameraOptionButton 
-                  text = 'Input information manually' 
-                  styleButton={{marginTop: 5}}
-                  handler={setInputManually}
-                  styleText = {{textDecorationLine: 'underline'}}></CameraOptionButton>
+                <CameraOptionButton 
+                    text = 'Take picture' 
+                    handler={launchCamera_}
+                    styleText = {{textDecorationLine: 'underline'}}></CameraOptionButton>
+            </View>
+            
+            <Text style = {{textAlign: 'center'}}>or</Text>
+            <CameraOptionButton 
+                    text = 'Input information manually' 
+                    styleButton={{marginTop: 5}}
+                    handler={setInputManually}
+                    styleText = {{textDecorationLine: 'underline'}}></CameraOptionButton>
         </View>
       )
     }
 
   return (
-    <View>
+    <View style ={styles.mainContainer}>
         {
           isImageSelected ?
           showImage()
@@ -150,10 +149,12 @@ const styles = StyleSheet.create({
   buttonRow: {
     flexDirection: 'row', 
     justifyContent: 'space-evenly',
-    alignContent: 'center',
-    // height: '10%'
-    // width: "100%"
+    alignContent: 'center'
+  },
+  mainContainer: {
+    flex: 1
   }
+
 });
 
 export default CameraView;

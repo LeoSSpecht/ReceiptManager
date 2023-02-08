@@ -1,50 +1,37 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
-
 import React from 'react';
-import type {PropsWithChildren} from 'react';
 import {
   SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
+  StyleSheet
 } from 'react-native';
 
-import {
-  Colors,
-} from 'react-native/Libraries/NewAppScreen';
-
-import ImageUploader from './src/pages/ImageUploader';
-import LoginPage from './src/pages/LoginPage';
 import { useState } from 'react';
+import HomePage from './src/pages/HomePage';
 
+import AppLoginContext from './src/components/LoginContext';
+import LoginFlux from './src/pages/LoginFlux';
 
 
 function App(): JSX.Element {
   const [loginState, setLoginState] = useState({state: false, uid: ""});
-
-  const LogInData = (state: boolean, uid: string) => {
+  const setLogInData = (state: boolean, uid: string) => {
     setLoginState({'state': state, 'uid': uid})
   }
 
+  const LogInData = {
+    state: loginState,
+    setLogin: setLogInData
+  }
   return (
-    <SafeAreaView>
-      {/* <View style = {{padding: 10, backgroundColor: Colors.white, alignItems: 'center'}}>
-        <ImageUploader/>
-      </View> */}
-      {
-        loginState.state ? 
-        <Text>Logged in</Text>:
-        <LoginPage changeLoginState={LogInData}></LoginPage>  
-      }
-    </SafeAreaView>
+    <AppLoginContext.Provider value={LogInData}>
+        <SafeAreaView>
+        {
+          loginState.state ? 
+          <HomePage/>:
+          <LoginFlux/>
+        }
+      </SafeAreaView>
+    </AppLoginContext.Provider>
+    
   );
 }
 
