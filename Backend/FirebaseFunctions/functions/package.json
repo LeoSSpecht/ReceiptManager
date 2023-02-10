@@ -6,7 +6,8 @@
     "shell": "firebase functions:shell",
     "start": "npm run shell",
     "deploy": "firebase deploy --only functions",
-    "logs": "firebase functions:log"
+    "logs": "firebase functions:log",
+    "emulators": "firebase emulators:start --import=data --export-on-exit"
   },
   "engines": {
     "node": "16"

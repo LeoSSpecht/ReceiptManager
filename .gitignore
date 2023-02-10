@@ -1,2 +1,6 @@
 Frontend/ReceiptManager/src/firebase/config.js
 
+Frontend/ReceiptManager/src/firebase/config.tsx
+Backend/FirebaseFunctions/functions/data/firestore_export/firestore_export.overall_export_metadata
+Backend/FirebaseFunctions/functions/data/firebase-export-metadata.json
+Backend/FirebaseFunctions/functions/data/auth_export/accounts.json

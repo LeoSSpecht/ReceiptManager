@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Text, View } from 'react-native';
-import CameraView from '../components/CameraView';
+import CameraView from './CameraView';
 import SelectDropdown from 'react-native-select-dropdown';
-import CameraOptionButton from '../components/NButton';
-import InputField from '../components/InputField';
+import CameraOptionButton from '../NButton';
+import InputField from '../InputField';
+import {ManualInputData} from './ManualInputForms';
+import ManualInputForms from './ManualInputForms';
 
 export type SelectedImage = {
     imageUri?: string;
@@ -14,61 +16,39 @@ export type SelectedImage = {
     fileSize?: number;
 }
 
-type ManualInputData = {
-    amount?: number;
-    name?: string;
+export type ImageUploaderProps = {
+    selectedImage: SelectedImage;
+    setSelectedImage: (_: SelectedImage) => void;
+
+    isImageSelected: boolean;
+    setIsImageSelected: (_: boolean) => void;
+
+    inputManually: boolean;
+    setInputManually: (_: boolean) => void;
+
+    manualInputData: ManualInputData;
+    setManualInputData: (_: ManualInputData) => void;
+
+    category: string;
+    setCategory: (_: string) => void;
+
+    isValid: boolean;
+    categories: Array<string>;
+
+    sendInformation: () => void;
 }
 
-type FormProps = {
-    changeInputMode: () => void;
-    handler: (_: string | number) => void;
-}
-
-const ManualInputForms: React.FC<FormProps> = ({changeInputMode, handler}) => {
-    return (
-        <View style = {{justifyContent: 'flex-end', alignContent: 'center', height: '98%'}}>
-            <View style = {{flex: 1, justifyContent: 'center'}}>
-                <InputField placeholder='Expenditure name' money = {false} handler = {handler}/>
-                <InputField placeholder='' money = {true} handler = {handler}/>
-            </View>
-            
-            <CameraOptionButton
-                text='Input using receipt'
-                styleText = {{textDecorationLine: 'underline'}}
-                styleButton = {{marginBottom: 10}}
-                handler={changeInputMode}
-            />   
-        </View>
-    )
-}
-
-const ImageUploader: React.FC = () => {
-    const [selectedImage, setSelectedImage] = useState<SelectedImage>();
-    const [isImageSelected, setIsImageSelected] = useState(false);
-    const [inputManually, setInputManually] = useState(false);
-    const [manualInputData, setManualInputData] = useState<ManualInputData>();
-    const [category, setCategory] = useState<string>("General");
-
-    useEffect(() => {
-        if(selectedImage){
-            setIsImageSelected(true)
-        }
-    }, [selectedImage])
-
-    let isValid = selectedImage != undefined ||  (manualInputData?.name && manualInputData?.amount);
-
-    const categories = [
-        'General',
-        'Restaurant',
-        'Groceries',
-        'House',
-        'Transportation',
-        'Utilities'
-    ];
-
-    const sendInformation = () => {
-        console.log(selectedImage?.imageUri);
-    }
+const ImageUploader: React.FC<ImageUploaderProps> = (
+    {
+        selectedImage,setSelectedImage,
+        isImageSelected,setIsImageSelected,
+        inputManually,setInputManually,
+        manualInputData,setManualInputData,
+        category,setCategory,
+        isValid,
+        categories,
+        sendInformation
+    }) => {
 
     const changeInputMode = () => {setInputManually(!inputManually)}
 
@@ -80,8 +60,6 @@ const ImageUploader: React.FC = () => {
             setManualInputData({amount: manualInputData?.amount, name: arg})
         }
     }
-
-
 
     return (
         <View style = {{alignItems: 'center',height: '100%', width: '100%'}}>

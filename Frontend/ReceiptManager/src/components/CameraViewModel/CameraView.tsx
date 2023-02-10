@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import { Image, Text, TouchableOpacity, View, StyleSheet, ViewStyle, Dimensions } from 'react-native';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-import { SelectedImage } from '../pages/ImageUploader';
+import { SelectedImage } from './ImageUploader';
 import { MediaType, Asset } from 'react-native-image-picker';
 // import { Container } from './styles';
-import CameraOptionButton from './NButton';
+import CameraOptionButton from '../NButton';
 
 type CameraViewProps = {
   isImageSelected: boolean;

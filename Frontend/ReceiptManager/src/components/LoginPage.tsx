@@ -6,13 +6,10 @@ import InputField from '../components/InputField';
 import CameraOptionButton from '../components/NButton';
 import { Icon } from 'react-native-elements'
 
-import { app } from '../firebase/config';
 import { GoogleSignin } from '@react-native-google-signin/google-signin'
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithCredential } from "firebase/auth";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithCredential } from "firebase/auth";
+import {auth} from '../firebase/config';
 import GoogleButton from '../components/GoogleButton';
-
-
-const auth = getAuth(app);
 
 type LoginProps = {
     register?:boolean;
