@@ -52,14 +52,14 @@ const CameraViewModel: React.FC = () => {
                 setLoadingUpload(false);
                 setDoneLoading(false);
             },1800)
+            resetInputState();
           } catch (e) {
             console.error("Error adding document: ", e);
             setLoadingUpload(false);
           }
     }
 
-    async function uploadReceipt(){
-        let filePath = LoginContext.state.uid + "/" + selectedImage.imageName;
+    async function uploadReceipt(filePath:string ){
         if(LoginContext.state.uid == ""){
             filePath = "testFolder" + filePath;
         }
@@ -73,10 +73,9 @@ const CameraViewModel: React.FC = () => {
             return getDownloadURL(storageRef);
         }
         catch(err){
-            return err;
+            console.log(err)
+            return null;
         }
-        
-
     }
 
     async function sendInformation(){
@@ -88,6 +87,7 @@ const CameraViewModel: React.FC = () => {
         //  amount -> null or float
         //  amountPossibilities -> [array]
         //  name -> string
+        //  foundTotal -> false
         //  isApproved -> boolean, true if manual input
         //  correctValue -> boolean, true if manual input
         
@@ -108,19 +108,23 @@ const CameraViewModel: React.FC = () => {
         }
         else{
             //Upload image into storage, get the link
-            let receiptReference = await uploadReceipt();
-            
-            let uploadData = {
-                date: new Date(),
-                'category': category,
-                isPicture: true,
-                amount: null,
-                isApproved: false,
-                correctValue: false,
-                userId: LoginContext.state.uid,
-                imageUrl: receiptReference
+            let filePath = LoginContext.state.uid + "/" + selectedImage.imageName;
+            let receiptReference = await uploadReceipt(filePath);
+            if(receiptReference){
+                let uploadData = {
+                    date: new Date(),
+                    'category': category,
+                    isPicture: true,
+                    amount: null,
+                    isApproved: false,
+                    correctValue: false,
+                    userId: LoginContext.state.uid,
+                    imageUrl: receiptReference,
+                    'filePath': filePath
+                }
+                uploadRecord('transactions', uploadData)
             }
-            uploadRecord('transactions', uploadData)
+            
         }
     }
 

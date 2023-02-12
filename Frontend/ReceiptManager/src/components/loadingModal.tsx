@@ -11,7 +11,7 @@ const LoadingModal = ({done}:{done:boolean}) => {
             Animated.spring(sizeAnim, {
                 toValue: 1,
                 // duration: 500,
-                tension: 10,
+                tension: 3,
                 useNativeDriver: true,
               }).start();
         // }

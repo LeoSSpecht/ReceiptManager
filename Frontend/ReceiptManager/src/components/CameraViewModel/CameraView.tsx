@@ -42,13 +42,11 @@ const CameraView: React.FC<CameraViewProps> = ({isImageSelected, imageData, setI
 
     const launchCamera_ = () => {
         launchCamera(options, (response) => {
-          console.log('Response = ', response);
           if (response.didCancel) {
             console.log('User cancelled image picker');
           } else if (response.errorCode) {
             console.log('ImagePicker Error: ', response.errorCode);
           } else {
-            console.log('response', response);
             if(response.assets && response.assets[0]){
               let asset: Asset = response.assets[0];
               setImage(fillImageAsset(asset));
@@ -59,13 +57,11 @@ const CameraView: React.FC<CameraViewProps> = ({isImageSelected, imageData, setI
 
     const launchImageLibrary_ = () => {
       launchImageLibrary(options, (response) => {
-        console.log('Response = ', response);
         if (response.didCancel) {
           console.log('User cancelled image picker');
         } else if (response.errorCode) {
           console.log('ImagePicker Error: ', response.errorCode);
         } else {
-          console.log('response', response);
           if(response.assets && response.assets[0]){
             let asset: Asset = response.assets[0];
             setImage(fillImageAsset(asset));

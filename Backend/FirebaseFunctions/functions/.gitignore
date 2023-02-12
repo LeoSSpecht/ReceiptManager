@@ -1,3 +1,5 @@
 node_modules/
 .env
 API_Keys.json
+API_Keys2.json
+data/
