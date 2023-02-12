@@ -11,7 +11,7 @@ import LoginFlux from './src/pages/LoginFlux';
 
 
 function App(): JSX.Element {
-  const [loginState, setLoginState] = useState({state: false, uid: ""});
+  const [loginState, setLoginState] = useState({state: true, uid: "123xyz"});
   const setLogInData = (state: boolean, uid: string) => {
     setLoginState({'state': state, 'uid': uid})
   }

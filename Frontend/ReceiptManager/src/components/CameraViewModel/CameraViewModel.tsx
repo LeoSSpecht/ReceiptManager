@@ -4,8 +4,9 @@ import ImageUploader, {SelectedImage} from './ImageUploader';
 import {ManualInputData} from './ManualInputForms';
 import AppLoginContext from '../LoginContext';
 
-import { app, db} from '../../firebase/config';
+import { app, db, storage} from '../../firebase/config';
 import { collection, addDoc } from "firebase/firestore";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import LoadingModal from '../loadingModal';
 
 // type imageRecord
@@ -46,17 +47,36 @@ const CameraViewModel: React.FC = () => {
     async function uploadRecord(collection_:string, object_: any){
         try {
             const docRef = await addDoc(collection(db, collection_), object_);
-            // console.log("Document written with ID: ", docRef.id);
             setDoneLoading(true);
             setTimeout(() =>{
                 setLoadingUpload(false);
                 setDoneLoading(false);
             },1800)
-            
           } catch (e) {
             console.error("Error adding document: ", e);
             setLoadingUpload(false);
           }
+    }
+
+    async function uploadReceipt(){
+        let filePath = LoginContext.state.uid + "/" + selectedImage.imageName;
+        if(LoginContext.state.uid == ""){
+            filePath = "testFolder" + filePath;
+        }
+        const storageRef = ref(storage, filePath);
+        const uri = selectedImage.imageUri!.replace('file://', '');
+
+        const response = await fetch(uri);
+        const blobFile = await response.blob();
+        try{
+            await uploadBytes(storageRef, blobFile)
+            return getDownloadURL(storageRef);
+        }
+        catch(err){
+            return err;
+        }
+        
+
     }
 
     async function sendInformation(){
@@ -88,14 +108,19 @@ const CameraViewModel: React.FC = () => {
         }
         else{
             //Upload image into storage, get the link
-            //Create object, add it to firebase
-            console.log(selectedImage)
-            // setLoadingUpload(true)
-            // setDoneLoading(true);
-            // setTimeout(() =>{
-            //     setLoadingUpload(false);
-            //     setDoneLoading(false);
-            // },1500)
+            let receiptReference = await uploadReceipt();
+            
+            let uploadData = {
+                date: new Date(),
+                'category': category,
+                isPicture: true,
+                amount: null,
+                isApproved: false,
+                correctValue: false,
+                userId: LoginContext.state.uid,
+                imageUrl: receiptReference
+            }
+            uploadRecord('transactions', uploadData)
         }
     }
 
